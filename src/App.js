@@ -1228,13 +1228,28 @@ function App() {
   ];
 
   const [selectedTab, setSelectedTab] = useState("prompt");
-  const [currentPrompt, setCurrentPrompt] = useState(prompts[0]);
+  const [currentPrompt, setCurrentPrompt] = useState(getDailyPrompt());
   const [entry, setEntry] = useState("");
   const [entries, setEntries] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [tags, setTags] = useState("");
   const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+ // Function to get the prompt based on the current day
+  function getDailyPrompt() {
+    const dayOfYear = getDayOfYear(new Date());
+    const promptIndex = dayOfYear % prompts.length; // Ensures it loops over prompts if more than 365 days
+    return prompts[promptIndex];
+  }
+
+  // Function to get the current day of the year
+  function getDayOfYear(date) {
+    const start = new Date(date.getFullYear(), 0, 0);
+    const diff = date - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.floor(diff / oneDay);
+  }
+
 // 1. Load Dark Mode preference from localStorage on component mount
   useEffect(() => {
     const savedMode = localStorage.getItem("dark-mode");
