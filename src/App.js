@@ -1235,14 +1235,14 @@ function App() {
   const [tags, setTags] = useState("");
   const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(false);
- // Function to get the prompt based on the current day
+  const [showIntro, setShowIntro] = useState(false); // <-- NEW
+
   function getDailyPrompt() {
     const dayOfYear = getDayOfYear(new Date());
-    const promptIndex = dayOfYear % prompts.length; // Ensures it loops over prompts if more than 365 days
+    const promptIndex = dayOfYear % prompts.length;
     return prompts[promptIndex];
   }
 
-  // Function to get the current day of the year
   function getDayOfYear(date) {
     const start = new Date(date.getFullYear(), 0, 0);
     const diff = date - start;
@@ -1250,36 +1250,27 @@ function App() {
     return Math.floor(diff / oneDay);
   }
 
-// 1. Load Dark Mode preference from localStorage on component mount
   useEffect(() => {
     const savedMode = localStorage.getItem("dark-mode");
-    if (savedMode === "true") {
-      setDarkMode(true);
-    }
+    if (savedMode === "true") setDarkMode(true);
   }, []);
 
-  // 2. Apply dark mode to the document body whenever darkMode state changes
   useEffect(() => {
     document.body.className = darkMode ? "dark" : "";
-    localStorage.setItem("dark-mode", darkMode);  // Save to localStorage
+    localStorage.setItem("dark-mode", darkMode);
   }, [darkMode]);
 
-  // Load saved journal entries from localStorage
   useEffect(() => {
     const savedEntries = localStorage.getItem("journal-entries");
-    if (savedEntries) {
-      setEntries(JSON.parse(savedEntries));
-    }
+    if (savedEntries) setEntries(JSON.parse(savedEntries));
   }, []);
 
-  // Save journal entries to localStorage whenever they change
   useEffect(() => {
     if (entries.length > 0) {
       localStorage.setItem("journal-entries", JSON.stringify(entries));
     }
   }, [entries]);
 
-  // Handle saving or updating an entry
   const handleSave = () => {
     if (!entry.trim()) return;
     const newEntry = {
@@ -1302,7 +1293,6 @@ function App() {
     setTags("");
   };
 
-  // Handle editing an existing entry
   const handleEdit = (index) => {
     const selected = entries[index];
     setEntry(selected.text);
@@ -1312,14 +1302,12 @@ function App() {
     setSelectedTab("prompt");
   };
 
-  // Handle deleting an entry
   const handleDelete = (index) => {
     const updated = [...entries];
     updated.splice(index, 1);
     setEntries(updated);
   };
 
-  // Handle downloading an entry as a PDF
   const handleDownload = (entry) => {
     const doc = new jsPDF();
     doc.setFontSize(12);
@@ -1331,7 +1319,6 @@ function App() {
     doc.save("journal-entry.pdf");
   };
 
-  // Filter entries based on search
   const filteredEntries = entries.filter(e =>
     e.text.toLowerCase().includes(search.toLowerCase()) ||
     e.tags.join(", ").toLowerCase().includes(search.toLowerCase())
@@ -1341,10 +1328,34 @@ function App() {
     <div className="app-container">
       <header>
         <h1>Daily Prompt</h1>
-        <button onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-        </button>
+        <div className="header-buttons">
+          <button onClick={() => setDarkMode(!darkMode)}>
+            {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+          </button>
+          <button onClick={() => setShowIntro(!showIntro)}>
+            {showIntro ? "❌ Hide Info" : "ℹ️ About"}
+          </button>
+        </div>
       </header>
+
+      {showIntro && (
+        <section className="intro">
+          <h2>✍️ Welcome to Daily Prompt</h2>
+          <p>
+            This app offers a new journaling question each day to help spark creativity, encourage reflection, and build a consistent writing habit.
+          </p>
+          <ul>
+            <li>✨ One fresh question each day</li>
+            <li>📝 Save and tag your journal entries</li>
+            <li>📄 Download entries as PDF</li>
+          </ul>
+          <p>
+            Created by <strong>Andrei Cupeș</strong> – a space for self-discovery through daily writing.  </p>
+<p>
+    📧 Contact: <a href="mailto:andreicupes@gmail.com">andreicupes@gmail.com</a>
+  </p>
+        </section>
+      )}
 
       <div className="tabs">
         <button
@@ -1423,5 +1434,6 @@ function App() {
       )}
     </div>
   );
-};
+}
+
 export default App;

@@ -2,6 +2,7 @@ body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f9f9;
+  color: #333;
   transition: background 0.3s, color 0.3s;
 }
 
@@ -29,17 +30,56 @@ header {
   margin-bottom: 1rem;
 }
 
-.tabs button {
-  padding: 0.5rem 1rem;
-  background: #ddd;
-  border: none;
+/* Base button style for all buttons including New Prompt */
+button {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
   cursor: pointer;
-  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  margin: 0 8px 8px 0; /* spacing */
 }
 
+/* Remove margin on last buttons in each row */
+.tabs button:last-child,
+.entry-buttons button:last-child,
+.header-buttons button:last-child,
+button.new-prompt-btn:last-child {
+  margin-right: 0;
+}
+
+/* Tabs active state */
 .tabs button.active {
   background-color: #0077cc;
   color: white;
+  border-color: #005fa3;
+}
+
+/* Hover states */
+button:hover {
+  background-color: #e0e0e0;
+  border-color: #999;
+}
+
+body.dark button {
+  background-color: #333;
+  color: #eee;
+  border-color: #555;
+  margin: 0 8px 8px 0;
+}
+
+body.dark button:hover {
+  background-color: #444;
+  border-color: #777;
+}
+
+body.dark .tabs button.active {
+  background-color: #005fa3;
+  color: #fff;
+  border-color: #003d6a;
 }
 
 .prompt-section textarea,
@@ -50,16 +90,42 @@ header {
   font-size: 1rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body.dark .prompt-section textarea,
+body.dark .prompt-section input {
+  background-color: #2b2b2b;
+  color: #eee;
+  border-color: #555;
 }
 
 .save-btn {
   background-color: #28a745;
   color: white;
-  padding: 0.7rem 1.2rem;
   border: none;
+  padding: 0.7rem 1.2rem;
   border-radius: 6px;
   cursor: pointer;
   margin-top: 0.5rem;
+  border: 1.5px solid #28a745;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+body.dark .save-btn {
+  background-color: #218838;
+  border-color: #1e7e34;
+  color: white;
+}
+
+body.dark .save-btn:hover {
+  background-color: #1c7430;
+  border-color: #145214;
 }
 
 .entries-section .entry-card {
@@ -68,6 +134,12 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   margin-bottom: 1rem;
   padding: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark .entries-section .entry-card {
+  background: #2b2b2b;
+  color: #eee;
 }
 
 .entries-section .entry-card .entry-header {
@@ -93,10 +165,27 @@ header {
 .entry-buttons button {
   margin-right: 0.5rem;
   background: #eee;
-  border: none;
+  border: 1.5px solid #ccc;
   border-radius: 5px;
-  padding: 0.5rem;
+  padding: 0.5rem 0.8rem;
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.entry-buttons button:hover {
+  background-color: #ddd;
+  border-color: #999;
+}
+
+body.dark .entry-buttons button {
+  background-color: #333;
+  color: #eee;
+  border-color: #555;
+}
+
+body.dark .entry-buttons button:hover {
+  background-color: #444;
+  border-color: #777;
 }
 
 .search-input {
@@ -106,12 +195,91 @@ header {
   margin-bottom: 1rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-body.dark .entry-card {
-  background: #2b2b2b;
+body.dark .search-input {
+  background-color: #2b2b2b;
+  color: #eee;
+  border-color: #555;
 }
 
-body.dark .tabs button.active {
-  background-color: #005fa3;
+.intro {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 720px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.dark .intro {
+  background-color: #1e1e1e;
+  color: #ddd;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+.intro h2 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.intro p {
+  margin-bottom: 12px;
+}
+
+.intro ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.intro li {
+  margin-bottom: 6px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.header-buttons button {
+  /* Inherit the base button styles */
+}
+
+.dark .header-buttons button {
+  background-color: #333;
+  color: #eee;
+  border-color: #555;
+}
+
+.dark .header-buttons button:hover {
+  background-color: #444;
+  border-color: #777;
+}
+
+/* Specific style for New Prompt button */
+button.new-prompt-btn {
+  /* Inherit from base button */
+}
+
+/* Remove margin-right for last button in any row */
+button:last-child {
+  margin-right: 0;
+}
+.intro a {
+  color: inherit;      /* Makes the link take the surrounding text color */
+  text-decoration: none; /* Removes underline */
+  cursor: pointer;      /* Keeps pointer cursor to show it’s clickable */
+}
+
+.intro a:hover {
+  text-decoration: underline; /* Optional: underline on hover for clarity */
 }
